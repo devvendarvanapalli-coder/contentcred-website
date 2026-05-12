@@ -1,0 +1,24 @@
+{
+  "name": "contentcred-website",
+  "version": "1.0.0",
+  "description": "git push -u origin claude/install-framer-motion-c6jdk",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devvendarvanapalli-coder/contentcred-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/devvendarvanapalli-coder/contentcred-website/issues"
+  },
+  "homepage": "https://github.com/devvendarvanapalli-coder/contentcred-website#readme",
+  "dependencies": {
+    "framer-motion": "^12.38.0"
+  }
+}
