@@ -4,295 +4,320 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ContentCred — The Affiliate Clipping System</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<meta name="description" content="ContentCred builds and manages clipping armies for creators and brands. Your long-form content, turned into hundreds of clips flooding TikTok, Reels, Shorts, and X. Pay only for verified views.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:#070711;color:#ECEAE4;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}
+body{background:#07070A;color:#F5F5F5;font-family:'Inter','Helvetica Neue',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}
 a{text-decoration:none;color:inherit}
-::selection{background:#FF6B35;color:#fff}
+img{display:block;max-width:100%}
+::selection{background:#FF6B35;color:#07070A}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
 :root{
-  --bg:#070711;--s1:#0C0C18;--s2:#11111F;--s3:#161626;
-  --glass:rgba(255,255,255,.04);--glass-h:rgba(255,255,255,.07);
-  --b0:rgba(255,255,255,.04);--b1:rgba(255,255,255,.08);--b2:rgba(255,255,255,.14);--b3:rgba(255,255,255,.22);
-  --t0:#F0EEE8;--t1:#8B8A88;--t2:#48474A;
-  --a:#FF6B35;--al:#FF8C5A;--ad:#CC5225;
-  --ab:rgba(255,107,53,.08);--as:rgba(255,107,53,.18);
-  --serif:'Fraunces',serif;--sans:'Plus Jakarta Sans',sans-serif;
+  --bg:#07070A;
+  --e1:#0E0E13;--e2:#15151B;--e3:#1C1C24;
+  --acc:#FF6B35;--acc-h:#FF7F4F;--acc-p:#E85A27;
+  --acc-glow:rgba(255,107,53,.14);--acc-weak:rgba(255,107,53,.10);--acc-line:rgba(255,107,53,.35);
+  --fg1:#F5F5F5;--fg2:rgba(245,245,245,.72);--fg3:rgba(245,245,245,.48);--fg4:rgba(245,245,245,.28);
+  --ln:rgba(245,245,245,.08);--ln2:rgba(245,245,245,.14);
+  --display:'Bebas Neue',Impact,sans-serif;
+  --sans:'Inter','Helvetica Neue',sans-serif;
+  --mono:'JetBrains Mono','SFMono-Regular',monospace;
+  --r:10px;--r2:16px;
 }
+
+/* ── NOISE GRAIN ── */
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;z-index:0}
+
+/* ── EYEBROW ── */
+.eyebrow{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);display:inline-flex;align-items:center;gap:8px}
+.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--acc);box-shadow:0 0 8px rgba(255,107,53,.6);flex-shrink:0}
 
 /* ── NAV ── */
-#nav{
-  position:fixed;top:14px;left:50%;transform:translateX(-50%);
-  z-index:900;width:calc(100% - 48px);max-width:1100px;height:58px;
-  display:flex;align-items:center;justify-content:space-between;padding:0 22px;
-  background:rgba(7,7,17,.6);backdrop-filter:blur(24px);
-  border:1px solid var(--b1);border-radius:16px;
-  transition:all .35s cubic-bezier(.22,1,.36,1);
-}
-#nav.scrolled{background:rgba(7,7,17,.92);border-color:var(--b2);box-shadow:0 8px 40px rgba(0,0,0,.5)}
-.nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--t0);letter-spacing:-.02em}
-.nav-logo svg{height:28px}
-.nav-links{display:flex;gap:28px;align-items:center}
-.nav-links a{font-size:13.5px;font-weight:500;color:var(--t1);transition:color .15s;cursor:pointer}
-.nav-links a:hover{color:var(--t0)}
-.nav-cta{height:36px;padding:0 20px;background:var(--a);color:#fff;border:none;border-radius:10px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.01em}
-.nav-cta:hover{background:var(--al);transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,53,.35)}
-.hbg{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:6px}
-.hbg span{width:18px;height:1.5px;background:var(--t1);display:block;border-radius:2px;transition:.3s}
-.mob{display:none;position:fixed;inset:0;z-index:950;background:rgba(7,7,17,.98);backdrop-filter:blur(32px);padding:80px 32px 40px;flex-direction:column;gap:20px}
-.mob.open{display:flex}
-.mob a{font-size:18px;font-weight:600;color:var(--t1);transition:color .15s}
-.mob a:hover{color:var(--t0)}
-.mob-x{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--t1);cursor:pointer;padding:8px}
-.mob-x svg{width:20px;height:20px}
-
-/* ── FLOATING CTA ── */
-.float-cta{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);z-index:800;opacity:0;transition:all .45s cubic-bezier(.22,1,.36,1);pointer-events:none}
-.float-cta.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
-.float-pill{display:inline-flex;align-items:center;gap:14px;background:rgba(7,7,17,.9);backdrop-filter:blur(20px);border:1px solid var(--b2);border-radius:100px;padding:6px 6px 6px 20px;font-size:13px;font-weight:500;color:var(--t0);cursor:pointer;box-shadow:0 8px 48px rgba(0,0,0,.6);transition:all .2s;white-space:nowrap}
-.float-pill:hover{transform:translateY(-2px)}
-.fp-btn{background:var(--a);color:#fff;border-radius:100px;padding:8px 18px;font-size:12px;font-weight:700;letter-spacing:.01em}
+#nav{position:fixed;top:0;left:0;right:0;z-index:900;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;transition:all .3s}
+#nav.scrolled{background:rgba(7,7,10,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--ln)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:22px;letter-spacing:.04em;color:var(--fg1)}
+.nav-logo span{color:var(--acc)}
+.nav-logo-mark{width:28px;height:28px;flex-shrink:0}
+.nav-links{display:flex;gap:32px}
+.nav-links a{font-size:13px;font-weight:500;color:var(--fg3);transition:color .15s;letter-spacing:.02em}
+.nav-links a:hover{color:var(--fg1)}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--acc);color:var(--bg);border:none;padding:12px 22px;border-radius:var(--r);font-family:var(--sans);font-size:13.5px;font-weight:700;cursor:pointer;transition:background .16s,transform .16s,box-shadow .16s;white-space:nowrap;letter-spacing:.01em}
+.btn-primary:hover{background:var(--acc-h);transform:translateY(-2px);box-shadow:0 10px 40px rgba(255,107,53,.3)}
+.btn-primary:active{transform:scale(.98)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--fg2);border:1px solid var(--ln2);padding:12px 22px;border-radius:var(--r);font-family:var(--sans);font-size:13.5px;font-weight:500;cursor:pointer;transition:color .16s,border-color .16s,background .16s;white-space:nowrap}
+.btn-ghost:hover{color:var(--fg1);border-color:rgba(245,245,245,.28);background:rgba(245,245,245,.04)}
+.nav-ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+.nav-ham span{width:20px;height:1.5px;background:var(--fg3);display:block;border-radius:2px;transition:.3s}
+.mob-menu{display:none;position:fixed;inset:0;z-index:950;background:rgba(7,7,10,.98);backdrop-filter:blur(32px);flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center}
+.mob-menu.open{display:flex}
+.mob-menu a{font-family:var(--display);font-size:52px;letter-spacing:.04em;color:var(--fg2);transition:color .15s}
+.mob-menu a:hover{color:var(--fg1)}
+.mob-close{position:absolute;top:24px;right:32px;background:none;border:none;color:var(--fg3);font-size:20px;cursor:pointer;padding:8px}
 
 /* ── HERO ── */
-.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(255,107,53,.09) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(255,107,53,.04) 0%,transparent 60%),radial-gradient(ellipse 35% 35% at 85% 60%,rgba(120,80,255,.04) 0%,transparent 60%);pointer-events:none;animation:bgPulse 12s ease-in-out infinite}
-@keyframes bgPulse{0%,100%{opacity:.8}50%{opacity:1}}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,black 20%,transparent 70%);pointer-events:none}
-.hero-noise{position:absolute;inset:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:256px;pointer-events:none}
+#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 80px;position:relative;overflow:hidden}
+.hero-bg-glow{position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:900px;height:700px;background:radial-gradient(ellipse 60% 55% at 50% 30%,rgba(255,107,53,.11) 0%,transparent 70%);pointer-events:none}
+.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse 90% 80% at 50% 30%,black 20%,transparent 70%);pointer-events:none}
+.hero-content{position:relative;z-index:1;padding:0 40px;max-width:1400px;margin:0 auto;width:100%}
+.hero-eyebrow{margin-bottom:32px;opacity:0;animation:fadeUp .7s ease .1s forwards}
+.hero-headline{font-family:var(--display);font-size:clamp(80px,12vw,172px);line-height:.9;letter-spacing:-.01em;text-transform:uppercase;color:var(--fg1);margin-bottom:0;opacity:0;animation:fadeUp .8s ease .22s forwards}
+.hero-headline .acc{color:var(--acc)}
+.hero-headline .stroke{-webkit-text-stroke:1.5px rgba(245,245,245,.3);color:transparent}
+.hero-divider{margin:40px 0;height:1px;background:linear-gradient(90deg,var(--acc),var(--ln) 60%);opacity:0;animation:fadeUp .6s ease .4s forwards}
+.hero-bottom{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:end;opacity:0;animation:fadeUp .8s ease .5s forwards}
+.hero-body{font-size:17px;line-height:1.75;color:var(--fg2);max-width:560px}
+.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex-shrink:0}
+.hero-note{margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--fg4);letter-spacing:.1em;text-transform:uppercase}
+.hero-stats{display:flex;gap:0;border:1px solid var(--ln);border-radius:var(--r2);overflow:hidden;margin-top:48px;opacity:0;animation:fadeUp .8s ease .64s forwards}
+.hero-stat{flex:1;padding:20px 28px;border-right:1px solid var(--ln);position:relative}
+.hero-stat:last-child{border-right:none}
+.hero-stat-val{font-family:var(--display);font-size:42px;line-height:1;color:var(--acc);letter-spacing:.02em}
+.hero-stat-lbl{font-family:var(--mono);font-size:9.5px;color:var(--fg4);letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-.hero-badge{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;background:var(--ab);border:1px solid rgba(255,107,53,.2);border-radius:100px;padding:6px 14px 6px 8px;font-size:11px;font-weight:700;color:var(--a);letter-spacing:.04em;text-transform:uppercase;margin-bottom:28px;opacity:0;animation:up .7s ease .1s forwards}
-.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--a);box-shadow:0 0 8px rgba(255,107,53,.7);animation:pulse 2.5s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.hero h1{position:relative;z-index:1;font-family:var(--serif);font-size:clamp(40px,5vw,70px);font-weight:400;line-height:1.04;letter-spacing:-.028em;color:var(--t0);margin-bottom:22px;max-width:820px;opacity:0;animation:up .8s ease .22s forwards}
-.hero h1 .ac{color:var(--a)}
-.hero h1 .it{font-style:italic;font-weight:300}
-.hero-sub{position:relative;z-index:1;font-size:16px;font-weight:400;color:var(--t1);max-width:540px;margin:0 auto 36px;line-height:1.75;opacity:0;animation:up .8s ease .34s forwards}
-
-/* VSL */
-.vsl-wrap{position:relative;z-index:1;width:100%;max-width:860px;margin:0 auto 36px;opacity:0;animation:up .9s ease .44s forwards}
-.vsl-outer{border-radius:20px;padding:1px;background:linear-gradient(135deg,rgba(255,107,53,.3),rgba(255,107,53,.05) 50%,rgba(255,255,255,.06));box-shadow:0 32px 80px rgba(0,0,0,.5),0 0 80px rgba(255,107,53,.06)}
-.vsl-frame{border-radius:19px;overflow:hidden;aspect-ratio:16/9;background:var(--s2);position:relative;cursor:pointer;transition:box-shadow .3s}
-.vsl-frame.playing{cursor:default}
-.vsl-bg-el{position:absolute;inset:0;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(255,107,53,.06),transparent);pointer-events:none}
-.vsl-g{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);background-size:52px 52px;pointer-events:none}
-.vsl-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .4s}
-.vsl-frame.playing .vsl-overlay{opacity:0;pointer-events:none}
-.vsl-play{width:76px;height:76px;border-radius:50%;background:var(--a);display:flex;align-items:center;justify-content:center;transition:all .25s;animation:playRing 3s ease-in-out infinite}
-@keyframes playRing{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.4),0 16px 48px rgba(255,107,53,.25)}70%{box-shadow:0 0 0 18px rgba(255,107,53,0),0 16px 48px rgba(255,107,53,.25)}}
-.vsl-frame:hover .vsl-play{transform:scale(1.08);animation:none;box-shadow:0 0 0 20px rgba(255,107,53,.1),0 20px 56px rgba(255,107,53,.4)}
-.vsl-play svg{width:26px;height:26px;margin-left:4px}
-.vsl-label{font-family:var(--serif);font-size:17px;color:var(--t0);letter-spacing:-.01em}
-.vsl-meta{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.06em;text-transform:uppercase}
-.vsl-meta-dot{width:6px;height:6px;border-radius:50%;background:var(--a);animation:pulse 2.5s infinite}
+/* ── VSL BAND ── */
+.vsl-band{border-top:1px solid var(--ln);border-bottom:1px solid var(--ln);background:var(--e1);padding:72px 40px}
+.vsl-inner{max-width:960px;margin:0 auto}
+.vsl-label{text-align:center;margin-bottom:40px}
+.vsl-label p{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg4);margin-top:8px}
+.vsl-outer{border-radius:16px;padding:1px;background:linear-gradient(135deg,var(--acc-line),rgba(255,107,53,.06) 50%,var(--ln));box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 80px rgba(255,107,53,.05)}
+.vsl-frame{border-radius:15px;overflow:hidden;aspect-ratio:16/9;background:var(--e2);position:relative;cursor:pointer;transition:box-shadow .3s}
+.vsl-frame::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(255,107,53,.05),transparent);pointer-events:none}
+.vsl-play-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .4s}
+.vsl-frame.playing .vsl-play-wrap{opacity:0;pointer-events:none}
+.vsl-play-btn{width:80px;height:80px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;transition:all .25s;box-shadow:0 0 0 0 rgba(255,107,53,.4),0 16px 48px rgba(255,107,53,.25);animation:playPulse 3s ease-in-out infinite}
+@keyframes playPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.4),0 16px 48px rgba(255,107,53,.2)}70%{box-shadow:0 0 0 20px rgba(255,107,53,0),0 16px 48px rgba(255,107,53,.2)}}
+.vsl-frame:hover .vsl-play-btn{transform:scale(1.08);animation:none;box-shadow:0 0 0 24px rgba(255,107,53,.08),0 20px 56px rgba(255,107,53,.4)}
+.vsl-play-btn svg{width:28px;height:28px;margin-left:5px}
+.vsl-play-title{font-family:var(--display);font-size:28px;letter-spacing:.04em;text-transform:uppercase;color:var(--fg1)}
+.vsl-play-sub{font-family:var(--mono);font-size:10px;color:var(--fg4);letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.vsl-live-dot{width:6px;height:6px;border-radius:50%;background:var(--acc);animation:blink 2.5s ease-in-out infinite}
 .vsl-iframe{position:absolute;inset:0;width:100%;height:100%;border:none;display:none}
 .vsl-frame.playing .vsl-iframe{display:block}
-
-.hero-actions{position:relative;z-index:1;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;opacity:0;animation:up .8s ease .56s forwards}
-.btn-primary{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 28px;background:var(--a);color:#fff;border:none;border-radius:12px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.01em}
-.btn-primary:hover{background:var(--al);transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,107,53,.35)}
-.btn-ghost{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 24px;background:transparent;color:var(--t1);border:1px solid var(--b2);border-radius:12px;font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s}
-.btn-ghost:hover{color:var(--t0);border-color:var(--b3);background:var(--glass)}
-.hero-note{position:relative;z-index:1;font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.07em;text-transform:uppercase;margin-top:16px;opacity:0;animation:up .8s ease .68s forwards}
-@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── METRICS ── */
-.metrics{background:var(--s1);border-top:1px solid var(--b1);border-bottom:1px solid var(--b1)}
-.metrics-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
-.metric{padding:48px 44px;border-right:1px solid var(--b1);position:relative;overflow:hidden;transition:background .25s;cursor:default}
-.metric:last-child{border-right:none}
-.metric:hover{background:var(--s2)}
-.metric::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--a),var(--al));transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.22,1,.36,1)}
-.metric:hover::after{transform:scaleX(1)}
-.m-label{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px}
-.m-value{font-family:var(--serif);font-size:48px;font-weight:400;line-height:1;color:var(--t0);letter-spacing:-.025em;margin-bottom:10px}
-.m-value .ac{color:var(--a)}
-.m-desc{font-size:13px;font-weight:400;color:var(--t1);line-height:1.55}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* ── TICKER ── */
-.ticker-wrap{border-bottom:1px solid var(--b1);overflow:hidden;background:var(--bg);position:relative;padding:14px 0}
-.ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:1;pointer-events:none}
-.ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
-.ticker-wrap::after{right:0;background:linear-gradient(-90deg,var(--bg),transparent)}
-.ticker-track{display:flex;width:max-content;animation:ticker 35s linear infinite}
+.ticker{border-bottom:1px solid var(--ln);overflow:hidden;padding:14px 0;position:relative;background:var(--bg)}
+.ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:1;pointer-events:none}
+.ticker::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.ticker::after{right:0;background:linear-gradient(-90deg,var(--bg),transparent)}
+.ticker-track{display:flex;width:max-content;animation:ticker 38s linear infinite}
 .ticker-track:hover{animation-play-state:paused}
-.t-item{display:flex;align-items:center;gap:10px;padding:0 28px;font-size:11px;font-weight:600;color:var(--t2);white-space:nowrap;letter-spacing:.05em;text-transform:uppercase}
-.t-item .hi{color:var(--a)}
-.t-sep{opacity:.2}
+.t-item{display:flex;align-items:center;gap:10px;padding:0 32px;font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--fg4);white-space:nowrap;letter-spacing:.07em;text-transform:uppercase}
+.t-item .hi{color:var(--acc)}
+.t-sep{opacity:.25}
 @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
+/* ── METRICS BAND ── */
+.metrics-band{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--ln)}
+.metric{padding:48px 40px;border-right:1px solid var(--ln);position:relative;overflow:hidden;transition:background .25s;cursor:default}
+.metric:last-child{border-right:none}
+.metric:hover{background:var(--e1)}
+.metric::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--acc-h));transform:scaleX(0);transform-origin:left;transition:transform .55s cubic-bezier(.22,1,.36,1)}
+.metric:hover::after{transform:scaleX(1)}
+.m-label{font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--fg4);text-transform:uppercase;letter-spacing:.16em;margin-bottom:16px}
+.m-val{font-family:var(--display);font-size:62px;line-height:1;color:var(--fg1);letter-spacing:.02em;margin-bottom:10px}
+.m-val .acc{color:var(--acc)}
+.m-sub{font-size:13px;font-weight:400;color:var(--fg3);line-height:1.55}
+.metrics-note{text-align:center;padding:12px 24px;font-family:var(--mono);font-size:10px;color:var(--fg4);letter-spacing:.06em;border-bottom:1px solid var(--ln)}
+
 /* ── PLATFORM BAND ── */
-.platband{display:flex;border-bottom:1px solid var(--b1);background:var(--bg)}
-.pb-label{padding:16px 28px;font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.12em;border-right:1px solid var(--b1);display:flex;align-items:center;white-space:nowrap;min-width:160px}
-.pb-items{display:flex;flex:1}
-.pb-item{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 20px;border-right:1px solid var(--b1);transition:background .2s;cursor:default}
-.pb-item:last-child{border-right:none}
-.pb-item:hover{background:var(--s1)}
-.pb-item svg{width:16px;height:16px;opacity:.45;transition:opacity .2s;flex-shrink:0}
-.pb-item:hover svg{opacity:.8}
-.pb-item span{font-size:12.5px;font-weight:500;color:var(--t1)}
+.plat-band{display:flex;border-bottom:1px solid var(--ln);background:var(--bg)}
+.plat-label{padding:16px 28px;font-family:var(--mono);font-size:9px;font-weight:600;color:var(--fg4);text-transform:uppercase;letter-spacing:.14em;border-right:1px solid var(--ln);display:flex;align-items:center;white-space:nowrap;min-width:170px}
+.plat-items{display:flex;flex:1}
+.plat-item{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 20px;border-right:1px solid var(--ln);transition:background .2s;cursor:default}
+.plat-item:last-child{border-right:none}
+.plat-item:hover{background:var(--e1)}
+.plat-item svg{width:15px;height:15px;opacity:.4;transition:opacity .2s;flex-shrink:0}
+.plat-item:hover svg{opacity:.9}
+.plat-item span{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--fg3)}
 
 /* ── LAYOUT ── */
-.wrap{max-width:1200px;margin:0 auto;padding:0 44px}
-.sec{padding:120px 0}
-.section-tag{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;color:var(--a);text-transform:uppercase;letter-spacing:.16em;margin-bottom:20px}
-.section-tag::before{content:'';width:20px;height:1px;background:var(--a)}
-h2.display{font-family:var(--serif);font-size:clamp(36px,4.5vw,58px);font-weight:400;line-height:1.04;letter-spacing:-.025em;color:var(--t0);margin-bottom:18px}
-h2.display em{font-style:italic;color:var(--a)}
-h2.display .it{font-style:italic;font-weight:300}
-.lead-text{font-size:15.5px;font-weight:400;color:var(--t1);max-width:500px;line-height:1.8}
+.section{padding:120px 0;border-bottom:1px solid var(--ln)}
+.section-alt{background:var(--e1)}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+.section-h2{font-family:var(--display);font-size:clamp(56px,7vw,96px);line-height:.92;text-transform:uppercase;letter-spacing:-.005em;color:var(--fg1);margin:20px 0 24px}
+.section-h2 .acc{color:var(--acc)}
+.section-lead{font-size:16px;font-weight:400;color:var(--fg2);max-width:560px;line-height:1.8}
 
-/* ── HOW IT WORKS ── */
-.how-bg{background:var(--s1);border-top:1px solid var(--b1);border-bottom:1px solid var(--b1)}
-.steps-grid{margin-top:64px;display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--b1);border-radius:24px;overflow:hidden}
-.step{background:var(--s1);padding:52px 48px;position:relative;overflow:hidden;transition:background .25s;cursor:default}
-.step:hover{background:var(--s2)}
-.step-num{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:28px}
-.step-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;background:var(--ab);border:1px solid var(--as);transition:transform .25s,box-shadow .25s}
-.step-icon svg{width:22px;height:22px;color:var(--a)}
-.step:hover .step-icon{transform:scale(1.06);box-shadow:0 8px 24px rgba(255,107,53,.18)}
-.step h3{font-family:var(--serif);font-size:22px;font-weight:400;color:var(--t0);margin-bottom:12px;letter-spacing:-.015em}
-.step p{font-size:13.5px;font-weight:400;color:var(--t1);line-height:1.8}
-.step-bar{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--a),var(--al));transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.22,1,.36,1)}
-.step:hover .step-bar{transform:scaleX(1)}
+/* ── SERVICES ── */
+.services-grid{display:grid;grid-template-columns:340px 1fr;gap:0;margin-top:56px;border:1px solid var(--ln);border-radius:var(--r2);overflow:hidden}
+.svc-tabs{display:flex;flex-direction:column;border-right:1px solid var(--ln)}
+.svc-tab{display:flex;align-items:center;gap:16px;padding:24px 28px;background:transparent;border:none;border-bottom:1px solid var(--ln);cursor:pointer;color:var(--fg3);text-align:left;transition:all .2s;position:relative}
+.svc-tab:last-child{border-bottom:none}
+.svc-tab:hover{background:rgba(245,245,245,.025);color:var(--fg2)}
+.svc-tab.active{background:var(--acc-weak);color:var(--fg1)}
+.svc-tab.active::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc)}
+.svc-tab-icon{color:var(--fg4);flex-shrink:0;transition:color .2s}
+.svc-tab.active .svc-tab-icon{color:var(--acc)}
+.svc-tab-text{flex:1}
+.svc-tab-name{font-family:var(--sans);font-size:14px;font-weight:600;line-height:1.2}
+.svc-tab-hint{font-family:var(--mono);font-size:10px;color:var(--fg4);letter-spacing:.06em;margin-top:3px}
+.svc-tab-num{font-family:var(--mono);font-size:10px;color:var(--fg4);letter-spacing:.1em}
+.svc-panel{padding:48px;background:var(--e1)}
+.svc-panel-icon{color:var(--acc);margin-bottom:24px}
+.svc-panel-title{font-family:var(--display);font-size:clamp(40px,5vw,72px);line-height:1;text-transform:uppercase;letter-spacing:-.005em;color:var(--fg1);margin-bottom:16px}
+.svc-panel-desc{font-size:15px;line-height:1.75;color:var(--fg2);margin-bottom:28px;max-width:560px}
+.svc-bullets{list-style:none;display:flex;flex-direction:column;gap:12px}
+.svc-bullet{display:flex;align-items:flex-start;gap:12px;font-size:13.5px;color:var(--fg2);line-height:1.55}
+.svc-bullet::before{content:'';width:5px;height:5px;border-radius:1px;background:var(--acc);flex-shrink:0;margin-top:6px}
 
-/* ── SYSTEM FLOW ── */
-.flow-card{margin-top:64px;border:1px solid var(--b1);border-radius:24px;overflow:hidden;background:var(--s1)}
-.fc-header{padding:32px 44px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;background:var(--s2)}
-.fc-title{font-family:var(--serif);font-size:19px;font-weight:400;color:var(--t0);letter-spacing:-.01em}
-.fc-live{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;color:var(--a);text-transform:uppercase;letter-spacing:.1em}
-.fc-live-dot{width:7px;height:7px;border-radius:50%;background:var(--a);box-shadow:0 0 10px rgba(255,107,53,.5);animation:pulse 2.5s infinite}
-.flow-nodes{display:grid;grid-template-columns:repeat(4,1fr)}
-.fn{padding:36px;border-right:1px solid var(--b1);position:relative;transition:background .2s;cursor:default}
-.fn:last-child{border-right:none}
-.fn:hover{background:var(--s2)}
-.fn::after{content:'→';position:absolute;right:-10px;top:36px;font-size:15px;color:var(--t2);z-index:1}
-.fn:last-child::after{display:none}
-.fn-step{font-size:9px;font-weight:700;color:var(--a);text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px}
-.fn-num{font-family:var(--serif);font-size:38px;font-weight:400;color:var(--t0);line-height:1;margin-bottom:8px}
-.fn-num .ac{color:var(--a)}
-.fn-name{font-size:13px;font-weight:600;color:var(--t0);margin-bottom:6px;letter-spacing:-.01em}
-.fn-desc{font-size:12px;font-weight:400;color:var(--t1);line-height:1.7}
-.flow-plats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--b1)}
-.fp{padding:22px 32px;border-right:1px solid var(--b1);display:flex;align-items:center;gap:12px;transition:background .2s;cursor:default}
-.fp:last-child{border-right:none}
-.fp:hover{background:var(--s2)}
-.fp svg{width:20px;height:20px;flex-shrink:0}
-.fp-name{font-size:13px;font-weight:600;color:var(--t0)}
-.fp-stat{font-size:10px;font-weight:600;color:var(--a);margin-top:2px;letter-spacing:.04em}
+/* ── PROCESS ── */
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px}
+.process-step{padding:36px 36px 36px 0;border-top:2px solid var(--acc);position:relative}
+.process-step+.process-step{padding-left:36px;border-left:1px solid var(--ln)}
+.process-num{font-family:var(--mono);font-size:10px;color:var(--acc);letter-spacing:.2em;text-transform:uppercase;margin-bottom:20px}
+.process-title{font-family:var(--display);font-size:34px;line-height:1;text-transform:uppercase;color:var(--fg1);margin-bottom:12px;letter-spacing:.02em}
+.process-desc{font-size:13.5px;line-height:1.7;color:var(--fg3)}
+.process-arrow{position:absolute;top:36px;right:-16px;width:16px;height:16px;z-index:1;color:var(--acc);font-size:18px;display:flex;align-items:center;justify-content:center}
+.process-step:last-child .process-arrow{display:none}
+.process-note{margin-top:48px;padding:22px 28px;background:var(--e1);border:1px solid var(--ln);border-radius:var(--r2);display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.process-note-tag{font-family:var(--mono);font-size:10px;color:var(--acc);text-transform:uppercase;letter-spacing:.16em;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.process-note-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--acc);box-shadow:0 0 8px rgba(255,107,53,.6);flex-shrink:0;animation:blink 2.5s ease-in-out infinite}
+.process-note-body{font-size:13.5px;color:var(--fg3);line-height:1.6}
+
+/* ── HALFTIME ── */
+#halftime{padding:120px 40px;background:var(--acc);text-align:center;position:relative;overflow:hidden;border-bottom:none}
+#halftime .grain{opacity:.06}
+.halftime-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:rgba(7,7,10,.5);margin-bottom:28px;display:flex;align-items:center;justify-content:center;gap:8px}
+.halftime-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:rgba(7,7,10,.35);display:block}
+.halftime-hl{font-family:var(--display);font-size:clamp(72px,13vw,190px);line-height:.88;letter-spacing:-.015em;text-transform:uppercase;color:var(--bg)}
+.halftime-sub{font-family:var(--sans);font-size:15px;color:rgba(7,7,10,.55);margin-top:36px;font-weight:500;letter-spacing:.02em;max-width:600px;margin-left:auto;margin-right:auto}
 
 /* ── COMPARISON ── */
-.comp-table{border:1px solid var(--b1);border-radius:20px;overflow:hidden;margin-top:64px}
-.comp-head{display:grid;grid-template-columns:1.4fr 1fr 1fr;background:var(--s2);border-bottom:1px solid var(--b1)}
-.ch{padding:20px 32px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t2)}
-.ch.win{background:rgba(255,107,53,.06);border-left:1px solid rgba(255,107,53,.12);color:var(--a);display:flex;align-items:center;gap:8px}
-.ch-dot{width:6px;height:6px;border-radius:50%;background:var(--a);animation:pulse 2.5s infinite}
-.comp-row{display:grid;grid-template-columns:1.4fr 1fr 1fr;border-top:1px solid var(--b0);transition:background .15s}
-.comp-row:hover{background:rgba(255,255,255,.012)}
-.cc{padding:16px 32px;font-size:13px;font-weight:400;color:var(--t1);display:flex;align-items:center;gap:8px}
-.cc.feat{font-weight:600;font-size:13.5px;color:var(--t0)}
-.cc.win{color:var(--a);background:rgba(255,107,53,.025);border-left:1px solid rgba(255,107,53,.07)}
-.cc .bad{color:rgba(220,75,75,.65)}
-.vs-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
-.vs-card{border:1px solid var(--b1);border-radius:20px;padding:40px;transition:border-color .2s}
-.vs-card:hover{border-color:var(--b2)}
-.vs-card.vs-bad{background:rgba(220,75,75,.025)}
-.vs-card.vs-good{background:var(--ab);border-color:rgba(255,107,53,.15)}
-.vs-card h4{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:22px}
-.vs-card.vs-bad h4{color:rgba(220,75,75,.55)}
-.vs-card.vs-good h4{color:var(--a)}
-.vs-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;font-weight:400;color:var(--t1);line-height:1.65;margin-bottom:12px}
-.vs-icon{flex-shrink:0;margin-top:2px}
-.vs-icon svg{width:14px;height:14px}
+.comp-table{margin-top:56px;border:1px solid var(--ln);border-radius:var(--r2);overflow:hidden}
+.comp-head{display:grid;grid-template-columns:1.6fr 1fr 1fr;background:var(--e2);border-bottom:1px solid var(--ln)}
+.comp-hcell{padding:18px 28px;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--fg4)}
+.comp-hcell.win{background:rgba(255,107,53,.07);color:var(--acc);border-left:1px solid rgba(255,107,53,.14);display:flex;align-items:center;gap:8px}
+.comp-win-dot{width:6px;height:6px;border-radius:50%;background:var(--acc);animation:blink 2.5s ease-in-out infinite}
+.comp-row{display:grid;grid-template-columns:1.6fr 1fr 1fr;border-top:1px solid rgba(245,245,245,.04);transition:background .12s}
+.comp-row:hover{background:rgba(245,245,245,.02)}
+.comp-cell{padding:15px 28px;font-size:13px;color:var(--fg2);display:flex;align-items:center;gap:8px;line-height:1.5}
+.comp-cell.lbl{font-weight:600;font-size:13.5px;color:var(--fg1)}
+.comp-cell.win{color:var(--acc);background:rgba(255,107,53,.025);border-left:1px solid rgba(255,107,53,.07)}
+.comp-bad{color:rgba(240,82,82,.65)}
+.pricing-block{margin-top:56px;border:1px solid var(--ln);border-radius:var(--r2);overflow:hidden}
+.pricing-block-head{padding:20px 36px;background:var(--e2);border-bottom:1px solid var(--ln);font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--acc);display:flex;align-items:center;gap:8px}
+.pricing-block-head::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--acc);animation:blink 2.5s ease-in-out infinite}
+.pricing-block-body{padding:40px 36px;background:var(--e1);display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.pricing-block-title{font-family:var(--display);font-size:clamp(32px,3.5vw,52px);line-height:1;text-transform:uppercase;color:var(--fg1);margin-bottom:20px;grid-column:1/-1}
+.pricing-block-body p{font-size:14px;line-height:1.75;color:var(--fg2)}
+.pricing-block-body strong{color:var(--fg1);font-weight:600}
+
+/* ── FOUNDER ── */
+.founder-grid{display:grid;grid-template-columns:auto 1fr;gap:80px;align-items:center}
+.founder-img-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.founder-img{width:220px;height:264px;border-radius:var(--r2);overflow:hidden;border:1px solid var(--acc-line);flex-shrink:0;background:var(--e2)}
+.founder-img img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.founder-tag{font-family:var(--mono);font-size:10px;color:var(--fg4);letter-spacing:.1em;text-transform:uppercase;text-align:center}
+.founder-linkedin{font-family:var(--mono);font-size:10px;color:var(--acc);letter-spacing:.06em;transition:opacity .16s}
+.founder-linkedin:hover{opacity:.7}
+.founder-copy h2{font-family:var(--display);font-size:clamp(40px,4.5vw,64px);line-height:.96;text-transform:uppercase;color:var(--fg1);margin:20px 0 28px;letter-spacing:-.005em}
+.founder-copy p{font-size:15px;line-height:1.8;color:var(--fg2);margin-bottom:18px;max-width:600px}
 
 /* ── FAQ ── */
-.faq-bg{background:var(--s1);border-top:1px solid var(--b1);border-bottom:1px solid var(--b1)}
-.faq-layout{margin-top:64px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
-.faq-sticky{position:sticky;top:92px}
-.faq-sticky h3{font-family:var(--serif);font-size:22px;font-weight:400;color:var(--t0);margin-bottom:12px;letter-spacing:-.01em}
-.faq-sticky p{font-size:13.5px;font-weight:400;color:var(--t1);line-height:1.75;margin-bottom:26px}
-.faq-cta{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 20px;background:var(--ab);color:var(--a);border:1px solid var(--as);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
-.faq-cta:hover{background:var(--as);transform:translateY(-1px)}
-.faq-list{display:flex;flex-direction:column;gap:8px}
-.faq-item{border:1px solid var(--b1);border-radius:14px;overflow:hidden;transition:border-color .2s}
+.faq-grid{display:grid;grid-template-columns:320px 1fr;gap:64px;margin-top:56px;align-items:start}
+.faq-sticky{position:sticky;top:88px}
+.faq-sticky h3{font-family:var(--display);font-size:40px;line-height:1;text-transform:uppercase;color:var(--fg1);margin-bottom:16px}
+.faq-sticky p{font-size:14px;color:var(--fg2);line-height:1.75;margin-bottom:24px}
+.faq-sticky-cta{font-family:var(--mono);font-size:11px;color:var(--acc);letter-spacing:.08em;transition:opacity .16s}
+.faq-sticky-cta:hover{opacity:.7}
+.faq-list{display:flex;flex-direction:column;gap:6px}
+.faq-item{border:1px solid var(--ln);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
 .faq-item.open{border-color:rgba(255,107,53,.25)}
-.faq-item:not(.open):hover{border-color:var(--b2)}
-.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;background:none;border:none;cursor:pointer;font-family:var(--serif);font-size:15.5px;font-weight:400;color:var(--t0);text-align:left;transition:background .15s;letter-spacing:-.01em}
+.faq-item:not(.open):hover{border-color:var(--ln2)}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:15px;font-weight:600;color:var(--fg1);text-align:left;transition:background .15s;letter-spacing:-.01em;line-height:1.4}
 .faq-item.open .faq-q{background:rgba(255,107,53,.04)}
-.faq-item:not(.open) .faq-q:hover{background:var(--glass)}
-.faq-toggle{width:26px;height:26px;border-radius:50%;background:var(--ab);border:1px solid var(--as);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .35s cubic-bezier(.22,1,.36,1)}
-.faq-toggle svg{width:10px;height:10px;color:var(--a);transition:transform .35s}
-.faq-item.open .faq-toggle{background:var(--as);transform:rotate(45deg)}
-.faq-ans{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.22,1,.36,1)}
-.faq-item.open .faq-ans{max-height:300px}
-.faq-ans-inner{padding:0 22px 20px;font-size:13.5px;font-weight:400;color:var(--t1);line-height:1.8}
+.faq-item:not(.open) .faq-q:hover{background:rgba(245,245,245,.025)}
+.faq-toggle{width:28px;height:28px;border-radius:50%;background:var(--acc-weak);border:1px solid var(--acc-line);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s cubic-bezier(.22,1,.36,1)}
+.faq-toggle svg{width:10px;height:10px;color:var(--acc);transition:transform .3s}
+.faq-item.open .faq-toggle{background:var(--acc);transform:rotate(45deg)}
+.faq-item.open .faq-toggle svg{color:var(--bg)}
+.faq-ans{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.22,1,.36,1)}
+.faq-item.open .faq-ans{max-height:320px}
+.faq-ans-inner{padding:0 24px 22px;font-size:14px;color:var(--fg2);line-height:1.8}
 
-/* ── FINAL CTA ── */
-.cta-section{padding:160px 0;position:relative;overflow:hidden;text-align:center}
-.cta-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 70% at 50% 50%,rgba(255,107,53,.075) 0%,transparent 65%);pointer-events:none;animation:bgPulse 10s ease-in-out infinite}
-.cta-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black 30%,transparent 75%);pointer-events:none}
-.cta-section h2{font-family:var(--serif);font-size:clamp(44px,5.5vw,72px);font-weight:400;line-height:1.02;letter-spacing:-.028em;margin-bottom:20px;position:relative;z-index:1}
-.cta-section h2 em{font-style:italic;color:var(--a)}
-.cta-section .lead-text{margin:0 auto 52px;position:relative;z-index:1}
-.cta-card{display:inline-block;background:var(--s1);border:1px solid var(--b2);border-radius:28px;padding:52px 68px;position:relative;z-index:1}
-.cta-card .btn-primary{font-size:15px;height:52px;padding:0 36px;border-radius:14px;box-shadow:0 8px 48px rgba(255,107,53,.3)}
-.trust-line{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:22px}
-.trust-line span{font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.06em;text-transform:uppercase}
-.trust-sep{opacity:.2;color:var(--t2)}
+/* ── CTA SECTION ── */
+#cta-section{padding:160px 40px;text-align:center;position:relative;overflow:hidden;background:var(--bg)}
+.cta-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 65% at 50% 50%,rgba(255,107,53,.08) 0%,transparent 65%);pointer-events:none;animation:breathe 9s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.8}50%{opacity:1}}
+.cta-hl{font-family:var(--display);font-size:clamp(64px,10vw,140px);line-height:.9;text-transform:uppercase;letter-spacing:-.01em;color:var(--fg1);margin-bottom:24px;position:relative;z-index:1}
+.cta-hl .acc{color:var(--acc)}
+.cta-sub{font-size:17px;color:var(--fg2);max-width:560px;margin:0 auto 52px;line-height:1.75;position:relative;z-index:1}
+.cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;margin-bottom:32px}
+.cta-trust{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.trust-badge{font-family:var(--mono);font-size:10px;color:var(--fg4);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--ln);border-radius:100px;padding:6px 14px}
 
 /* ── FOOTER ── */
-footer{border-top:1px solid var(--b1);padding:36px 44px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-.f-logo{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;color:var(--t0)}
-.f-logo svg{height:26px}
-.f-copy{font-size:11px;font-weight:500;color:var(--t2);letter-spacing:.04em}
+footer{border-top:1px solid var(--ln);padding:36px 40px}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;max-width:1280px;margin:0 auto}
+.footer-brand{display:flex;flex-direction:column;gap:6px}
+.footer-logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:20px;letter-spacing:.04em;color:var(--fg1)}
+.footer-logo .acc{color:var(--acc)}
+.footer-logo svg{width:24px;height:24px}
+.footer-tagline{font-family:var(--mono);font-size:10px;color:var(--fg4);letter-spacing:.1em;text-transform:uppercase}
+.footer-links{display:flex;gap:28px;flex-wrap:wrap}
+.footer-links a{font-size:12px;font-weight:500;color:var(--fg3);letter-spacing:.02em;transition:color .15s}
+.footer-links a:hover{color:var(--fg1)}
+.footer-right{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.footer-email{font-family:var(--mono);font-size:11px;color:var(--fg4);letter-spacing:.05em;transition:color .15s}
+.footer-email:hover{color:var(--acc)}
+.footer-copy{font-family:var(--mono);font-size:10px;color:var(--fg4);letter-spacing:.06em}
 
-/* ── REVEAL ── */
-.rv{opacity:0;transform:translateY(24px);transition:opacity .75s ease,transform .75s ease}
+/* ── SCROLL REVEAL ── */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
 .rv.on{opacity:1;transform:translateY(0)}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
 
 /* ── RESPONSIVE ── */
-@media(max-width:900px){
-  #nav{width:calc(100% - 32px);padding:0 18px}
-  .nav-links{display:none}
-  .hbg{display:flex}
-  .hero{padding:104px 16px 72px}
-  .wrap{padding:0 20px}
-  .metrics-inner{grid-template-columns:1fr 1fr}
-  .metric{padding:32px 24px;border-right:none;border-bottom:1px solid var(--b1)}
-  .metric:nth-child(odd){border-right:1px solid var(--b1)}
-  .metric:nth-last-child(-n+2){border-bottom:none}
-  .m-value{font-size:40px}
-  .platband{display:none}
-  .steps-grid{grid-template-columns:1fr}
-  .flow-nodes,.flow-plats{grid-template-columns:1fr 1fr}
-  .fn::after{display:none}
-  .fn{border-right:none;border-bottom:1px solid var(--b1)}
-  .fn:nth-child(odd){border-right:1px solid var(--b1)}
-  .fn:nth-last-child(-n+2){border-bottom:none}
-  .fp{border-right:none;border-bottom:1px solid var(--b1)}
-  .fp:nth-child(odd){border-right:1px solid var(--b1)}
-  .fp:nth-last-child(-n+2){border-bottom:none}
-  .comp-head,.comp-row{grid-template-columns:1fr 1fr}
-  .ch:first-child,.cc.feat{display:none}
-  .vs-cards{grid-template-columns:1fr}
-  .faq-layout{grid-template-columns:1fr}
-  .faq-sticky{position:static}
-  .cta-card{padding:40px 28px}
-  footer{padding:28px 20px}
-  .sec{padding:88px 0}
-  .float-cta{bottom:16px}
+@media(max-width:1024px){
+  .services-grid{grid-template-columns:1fr}
+  .svc-tabs{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--ln)}
+  .svc-tab{border-bottom:none;border-right:1px solid var(--ln);flex-shrink:0}
+  .svc-tab.active::after{top:auto;bottom:0;left:0;right:0;width:auto;height:3px}
+  .founder-grid{grid-template-columns:1fr;gap:40px}
+  .founder-img-wrap{flex-direction:row;justify-content:flex-start}
+  .pricing-block-body{grid-template-columns:1fr}
 }
-@media(max-width:540px){
-  .hero h1{font-size:clamp(36px,10vw,52px)}
-  .flow-nodes{grid-template-columns:1fr}
-  .fn:nth-child(odd){border-right:none}
-  .fn:nth-last-child(-n+2){border-bottom:1px solid var(--b1)}
-  .fn:last-child{border-bottom:none}
-  .steps-grid{gap:0}
-  .step{padding:36px 28px}
+@media(max-width:900px){
+  #nav{padding:0 24px}
+  .nav-links{display:none}
+  .nav-ham{display:flex}
+  .hero-content{padding:0 24px}
+  .hero-headline{font-size:clamp(64px,16vw,120px)}
+  .hero-bottom{grid-template-columns:1fr;gap:28px}
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .hero-stat:nth-child(3){border-top:1px solid var(--ln)}
+  .hero-stat:nth-child(4){border-top:1px solid var(--ln)}
+  .metrics-band{grid-template-columns:1fr 1fr}
+  .metric{border-right:none;border-bottom:1px solid var(--ln)}
+  .metric:nth-child(odd){border-right:1px solid var(--ln)}
+  .metric:nth-last-child(-n+2){border-bottom:none}
+  .plat-band{display:none}
+  .container{padding:0 24px}
+  .section{padding:88px 0}
+  .process-grid{grid-template-columns:1fr 1fr}
+  .process-step:first-child{padding-left:0;border-left:none}
+  .process-step:nth-child(3){padding-left:0;border-left:none;border-top:2px solid var(--acc)}
+  .comp-head,.comp-row{grid-template-columns:1fr 1fr}
+  .comp-hcell:first-child,.comp-cell.lbl{display:none}
+  .faq-grid{grid-template-columns:1fr}
+  .faq-sticky{position:static}
+  #cta-section{padding:100px 24px}
+  footer{padding:28px 24px}
+  .vsl-band{padding:56px 24px}
+}
+@media(max-width:600px){
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .process-grid{grid-template-columns:1fr}
+  .process-step{padding:28px 0!important;border-left:none!important}
+  .hero-headline{font-size:clamp(56px,18vw,100px)}
+  .halftime-hl{font-size:clamp(60px,18vw,140px)}
 }
 </style>
 </head>
@@ -300,415 +325,490 @@ footer{border-top:1px solid var(--b1);padding:36px 44px;display:flex;align-items
 
 <!-- NAV -->
 <nav id="nav">
-  <div class="nav-logo">
-    <svg viewBox="0 0 120 60" fill="none"><path d="M28,10 A22,22 0 1,0 28,50 L38,50 A12,12 0 1,1 38,10 Z" fill="#FF6B35"/><rect x="57" y="6" width="4" height="48" fill="#fff" rx="2"/><path d="M92,10 A22,22 0 1,1 92,50 L82,50 A12,12 0 1,0 82,10 Z" fill="#FF6B35"/></svg>
-    ContentCred
-  </div>
+  <a href="#" class="nav-logo">
+    <svg class="nav-logo-mark" viewBox="0 0 40 40" fill="none">
+      <path d="M10,4 A14,14 0 1,0 10,36 L17,36 A7,7 0 1,1 17,4 Z" fill="#FF6B35"/>
+      <rect x="20" y="2" width="3" height="36" rx="1.5" fill="#F5F5F5"/>
+      <path d="M30,4 A14,14 0 1,1 30,36 L23,36 A7,7 0 1,0 23,4 Z" fill="#FF6B35"/>
+    </svg>
+    CONTENT<span>CRED</span>
+  </a>
   <div class="nav-links">
-    <a href="#how">How it works</a>
-    <a href="#system">The system</a>
-    <a href="#compare">Why us</a>
+    <a href="#services">Services</a>
+    <a href="#process">How It Works</a>
+    <a href="#compare">Why Us</a>
     <a href="#faq">FAQ</a>
   </div>
-  <a href="https://calendly.com/contentcred-strategy/content-distribution-strategy-call" target="_blank">
-    <button class="nav-cta">Book a call</button>
-  </a>
-  <div class="hbg" onclick="openMob()"><span></span><span></span><span></span></div>
+  <button class="btn-primary" id="nav-book-btn">Book a Call <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+  <button class="nav-ham" id="ham-btn" aria-label="Open menu"><span></span><span></span><span></span></button>
 </nav>
 
 <!-- MOBILE MENU -->
-<div class="mob" id="mob">
-  <button class="mob-x" onclick="closeMob()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-  </button>
-  <a href="#how" onclick="closeMob()">How it works</a>
-  <a href="#system" onclick="closeMob()">The system</a>
-  <a href="#compare" onclick="closeMob()">Why us</a>
+<div class="mob-menu" id="mob-menu">
+  <button class="mob-close" id="mob-close">✕</button>
+  <a href="#services" onclick="closeMob()">Services</a>
+  <a href="#process" onclick="closeMob()">How It Works</a>
+  <a href="#compare" onclick="closeMob()">Why Us</a>
   <a href="#faq" onclick="closeMob()">FAQ</a>
-  <a href="https://calendly.com/contentcred-strategy/content-distribution-strategy-call" target="_blank" class="btn-primary" style="justify-content:center;margin-top:10px">Book a free call</a>
-</div>
-
-<!-- FLOATING CTA -->
-<div class="float-cta" id="floatCta">
-  <a href="https://calendly.com/contentcred-strategy/content-distribution-strategy-call" target="_blank">
-    <button class="float-pill">
-      Start distributing your content
-      <span class="fp-btn">Book free call →</span>
-    </button>
-  </a>
+  <button class="btn-primary" style="font-size:16px;padding:14px 32px;margin-top:8px" id="mob-book-btn">Book a Call</button>
 </div>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-noise"></div>
-
-  <div class="hero-badge">
-    <span class="badge-dot"></span>
-    Performance-based &nbsp;·&nbsp; Zero upfront cost
-  </div>
-
-  <h1>
-    Watch how we turn your content<br>
-    into a <span class="ac it">distribution engine</span>
-  </h1>
-  <p class="hero-sub">See exactly how the Affiliate Clipping System floods every short-form platform with your content — without you filming a single new video.</p>
-
-  <div class="vsl-wrap">
-    <div class="vsl-outer">
-      <div class="vsl-frame" id="vslFrame" onclick="playVsl()">
-        <div class="vsl-bg-el"></div>
-        <div class="vsl-g"></div>
-        <div class="vsl-overlay">
-          <div class="vsl-play">
-            <svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <div class="vsl-label">ContentCred — The Affiliate Clipping System</div>
-          <div class="vsl-meta"><span class="vsl-meta-dot"></span>Watch the full walkthrough</div>
-        </div>
-        <iframe class="vsl-iframe" id="vslIframe"
-          src=""
-          data-src="https://www.youtube.com/embed/?autoplay=1&rel=0&modestbranding=1"
-          allow="autoplay; fullscreen"
-          allowfullscreen>
-        </iframe>
+<section id="hero">
+  <div class="grain"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-bg-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="eyebrow">Performance-Based Content Distribution</span>
+    </div>
+    <h1 class="hero-headline">
+      Flood<br>The Feed.<br><span class="acc">Own</span> <span class="stroke">The Algo.</span>
+    </h1>
+    <div class="hero-divider"></div>
+    <div class="hero-bottom">
+      <div>
+        <p class="hero-body">ContentCred builds and manages clipping armies for creators and brands. Your long-form content, turned into hundreds of short-form clips distributed across TikTok, Reels, Shorts, and X — every day, on autopilot. You pay only for verified views.</p>
+        <p class="hero-note">Only 3 founding campaign spots available.</p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-primary" id="hero-book-btn" style="font-size:15px;padding:15px 28px">
+          Launch My Campaign
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+        <a href="#process" class="btn-ghost" style="font-size:15px;padding:15px 28px">How It Works</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val">30+</div>
+        <div class="hero-stat-lbl">Clippers / Campaign</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">1,800+</div>
+        <div class="hero-stat-lbl">Clips / Month</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">4</div>
+        <div class="hero-stat-lbl">Platforms</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">$0</div>
+        <div class="hero-stat-lbl">Upfront Cost</div>
       </div>
     </div>
   </div>
-
-  <div class="hero-actions">
-    <a href="https://calendly.com/contentcred-strategy/content-distribution-strategy-call" target="_blank" class="btn-primary">Book a free strategy call →</a>
-    <a href="#how" class="btn-ghost">See how it works</a>
-  </div>
-  <p class="hero-note">30-minute call &nbsp;·&nbsp; No prep &nbsp;·&nbsp; Zero obligation</p>
 </section>
 
-<!-- METRICS -->
-<div class="metrics">
-  <div class="metrics-inner">
-    <div class="metric rv"><div class="m-label">Curator accounts</div><div class="m-value"><span class="ac" data-to="30" data-suf="+">0+</span></div><div class="m-desc">Dedicated fan pages per campaign</div></div>
-    <div class="metric rv d1"><div class="m-label">Monthly reach</div><div class="m-value"><span data-to="10" data-suf="M+ views">0M+ views</span></div><div class="m-desc">From content you already filmed</div></div>
-    <div class="metric rv d2"><div class="m-label">Upfront cost</div><div class="m-value"><span class="ac">$0</span></div><div class="m-desc">Pay only when views are delivered</div></div>
-    <div class="metric rv d3"><div class="m-label">Better economics</div><div class="m-value"><span data-to="200" data-suf="×">0×</span></div><div class="m-desc">vs. paid ads at equivalent reach</div></div>
+<!-- VSL -->
+<div class="vsl-band rv">
+  <div class="vsl-inner">
+    <div class="vsl-label">
+      <span class="eyebrow">Watch the full breakdown</span>
+      <p>See exactly how the Affiliate Clipping System works</p>
+    </div>
+    <div class="vsl-outer">
+      <div class="vsl-frame" id="vslFrame" onclick="playVsl()">
+        <div class="vsl-play-wrap">
+          <div class="vsl-play-btn">
+            <svg viewBox="0 0 24 24" fill="#07070A"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="vsl-play-title">ContentCred — The System</div>
+          <div class="vsl-play-sub"><span class="vsl-live-dot"></span>Watch the full walkthrough</div>
+        </div>
+        <iframe class="vsl-iframe" id="vslIframe" src="" data-src="https://www.youtube.com/embed/?autoplay=1&rel=0&modestbranding=1" allow="autoplay; fullscreen" allowfullscreen></iframe>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- TICKER -->
-<div class="ticker-wrap">
+<div class="ticker">
   <div class="ticker-track">
-    <div class="t-item"><span class="hi">TikTok</span><span class="t-sep">·</span><span>1B+ daily active users</span></div>
-    <div class="t-item"><span class="hi">Instagram Reels</span><span class="t-sep">·</span><span>2B+ monthly users</span></div>
-    <div class="t-item"><span class="hi">YouTube Shorts</span><span class="t-sep">·</span><span>70B+ daily views</span></div>
-    <div class="t-item"><span class="hi">X / Twitter</span><span class="t-sep">·</span><span>600M+ monthly users</span></div>
-    <div class="t-item"><span class="hi">$1.67</span><span class="t-sep">·</span><span>avg. cost per retained customer</span></div>
-    <div class="t-item"><span class="hi">5M–10M</span><span class="t-sep">·</span><span>views per month per campaign</span></div>
-    <div class="t-item"><span class="hi">30+</span><span class="t-sep">·</span><span>curator accounts per campaign</span></div>
-    <div class="t-item"><span class="hi">$0</span><span class="t-sep">·</span><span>upfront cost ever</span></div>
-    <div class="t-item"><span class="hi">TikTok</span><span class="t-sep">·</span><span>1B+ daily active users</span></div>
-    <div class="t-item"><span class="hi">Instagram Reels</span><span class="t-sep">·</span><span>2B+ monthly users</span></div>
-    <div class="t-item"><span class="hi">YouTube Shorts</span><span class="t-sep">·</span><span>70B+ daily views</span></div>
-    <div class="t-item"><span class="hi">X / Twitter</span><span class="t-sep">·</span><span>600M+ monthly users</span></div>
-    <div class="t-item"><span class="hi">$1.67</span><span class="t-sep">·</span><span>avg. cost per retained customer</span></div>
-    <div class="t-item"><span class="hi">5M–10M</span><span class="t-sep">·</span><span>views per month per campaign</span></div>
-    <div class="t-item"><span class="hi">30+</span><span class="t-sep">·</span><span>curator accounts per campaign</span></div>
-    <div class="t-item"><span class="hi">$0</span><span class="t-sep">·</span><span>upfront cost ever</span></div>
+    <div class="t-item"><span class="hi">30+</span><span class="t-sep">·</span><span>Clipper accounts per campaign</span></div>
+    <div class="t-item"><span class="hi">1,800+</span><span class="t-sep">·</span><span>Clips posted per month</span></div>
+    <div class="t-item"><span class="hi">2× Daily posting</span><span class="t-sep">·</span><span>Per clipper</span></div>
+    <div class="t-item"><span class="hi">4 Platforms</span><span class="t-sep">·</span><span>TikTok / Reels / Shorts / X</span></div>
+    <div class="t-item"><span class="hi">5–10 days</span><span class="t-sep">·</span><span>From call to campaign live</span></div>
+    <div class="t-item"><span class="hi">8–12 clips</span><span class="t-sep">·</span><span>Extracted per video</span></div>
+    <div class="t-item"><span class="hi">Pay Per View</span><span class="t-sep">·</span><span>Zero upfront risk</span></div>
+    <div class="t-item"><span class="hi">Unspent Budget</span><span class="t-sep">·</span><span>Fully refundable</span></div>
+    <div class="t-item"><span class="hi">30+</span><span class="t-sep">·</span><span>Clipper accounts per campaign</span></div>
+    <div class="t-item"><span class="hi">1,800+</span><span class="t-sep">·</span><span>Clips posted per month</span></div>
+    <div class="t-item"><span class="hi">2× Daily posting</span><span class="t-sep">·</span><span>Per clipper</span></div>
+    <div class="t-item"><span class="hi">4 Platforms</span><span class="t-sep">·</span><span>TikTok / Reels / Shorts / X</span></div>
+    <div class="t-item"><span class="hi">5–10 days</span><span class="t-sep">·</span><span>From call to campaign live</span></div>
+    <div class="t-item"><span class="hi">8–12 clips</span><span class="t-sep">·</span><span>Extracted per video</span></div>
+    <div class="t-item"><span class="hi">Pay Per View</span><span class="t-sep">·</span><span>Zero upfront risk</span></div>
+    <div class="t-item"><span class="hi">Unspent Budget</span><span class="t-sep">·</span><span>Fully refundable</span></div>
   </div>
 </div>
+
+<!-- METRICS -->
+<div class="metrics-band">
+  <div class="metric rv"><div class="m-label">Clippers per campaign</div><div class="m-val"><span data-target="30" data-suffix="+">30+</span></div><div class="m-sub">Dedicated posting accounts</div></div>
+  <div class="metric rv d1"><div class="m-label">Clips per month</div><div class="m-val"><span data-target="1800" data-suffix="+">1,800+</span></div><div class="m-sub">Posted across all 4 platforms</div></div>
+  <div class="metric rv d2"><div class="m-label">Campaign launch</div><div class="m-val">5<span class="acc">–</span>10</div><div class="m-sub">Days from strategy call to live</div></div>
+  <div class="metric rv d3"><div class="m-label">Clips per video</div><div class="m-val">8<span class="acc">–</span>12</div><div class="m-sub">Extracted from your archive</div></div>
+</div>
+<div class="metrics-note">Projected output of a standard 30-clipper campaign · actual results vary by content quality, niche, and offer</div>
 
 <!-- PLATFORM BAND -->
-<div class="platband">
-  <div class="pb-label">Distributed across</div>
-  <div class="pb-items">
-    <div class="pb-item">
-      <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.77 1.52V6.75a4.85 4.85 0 0 1-1-.06z"/></svg>
-      <span>TikTok</span>
-    </div>
-    <div class="pb-item">
-      <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-      <span>Instagram Reels</span>
-    </div>
-    <div class="pb-item">
-      <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-      <span>YouTube Shorts</span>
-    </div>
-    <div class="pb-item">
-      <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      <span>X / Twitter</span>
-    </div>
+<div class="plat-band">
+  <div class="plat-label">Distributed across</div>
+  <div class="plat-items">
+    <div class="plat-item"><svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.17 8.17 0 0 0 4.77 1.52V6.75a4.85 4.85 0 0 1-1-.06z"/></svg><span>TikTok</span></div>
+    <div class="plat-item"><svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg><span>Instagram Reels</span></div>
+    <div class="plat-item"><svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg><span>YouTube Shorts</span></div>
+    <div class="plat-item"><svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><span>X / Twitter</span></div>
   </div>
 </div>
 
-<!-- HOW IT WORKS -->
-<div class="how-bg" id="how">
-<div class="wrap"><div class="sec">
-  <div class="section-tag rv">How it works</div>
-  <h2 class="display rv">From long-form to <em>everywhere</em><br>in four steps</h2>
-  <p class="lead-text rv">No slow onboarding. No confusing process. Book a call — we handle everything.</p>
-  <div class="steps-grid">
-    <div class="step rv d1">
-      <div class="step-num">01 — Strategy</div>
-      <div class="step-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.06 6.06l.84-.84a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+<!-- SERVICES -->
+<section class="section section-alt" id="services">
+  <div class="container">
+    <div class="eyebrow rv" style="margin-bottom:0">01 — Services</div>
+    <h2 class="section-h2 rv">Four systems. <span class="acc">One engine.</span></h2>
+    <div class="services-grid rv" id="svc-widget">
+      <div class="svc-tabs" id="svc-tabs">
+        <button class="svc-tab active" data-idx="0">
+          <span class="svc-tab-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
+          <span class="svc-tab-text"><span class="svc-tab-name">Content Clipping</span><span class="svc-tab-hint">Long-form → short-form</span></span>
+          <span class="svc-tab-num">01</span>
+        </button>
+        <button class="svc-tab" data-idx="1">
+          <span class="svc-tab-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></span>
+          <span class="svc-tab-text"><span class="svc-tab-name">Performance Campaigns</span><span class="svc-tab-hint">Pay per verified view</span></span>
+          <span class="svc-tab-num">02</span>
+        </button>
+        <button class="svc-tab" data-idx="2">
+          <span class="svc-tab-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></span>
+          <span class="svc-tab-text"><span class="svc-tab-name">Podcast Clipping</span><span class="svc-tab-hint">Audio → viral short clips</span></span>
+          <span class="svc-tab-num">03</span>
+        </button>
+        <button class="svc-tab" data-idx="3">
+          <span class="svc-tab-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 2-4h16l2 4"/><path d="M4 7v13h16V7"/><path d="M8 10v4"/><path d="M16 10v4"/></svg></span>
+          <span class="svc-tab-text"><span class="svc-tab-name">Brand Activation</span><span class="svc-tab-hint">Scale across every platform</span></span>
+          <span class="svc-tab-num">04</span>
+        </button>
       </div>
-      <h3>Jump on a strategy call</h3>
-      <p>Bring yourself and your content. We audit your best videos, map clip potential, and design a distribution strategy specific to your niche and offer. 30 minutes, no prep needed.</p>
-      <div class="step-bar"></div>
-    </div>
-    <div class="step rv d2">
-      <div class="step-num">02 — Production</div>
-      <div class="step-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
-      </div>
-      <h3>We clip and curate</h3>
-      <p>We extract the highest-converting moments from your long-form content and build platform-native clips. Each one is engineered to hook in the first three seconds and pull viewers toward your offer.</p>
-      <div class="step-bar"></div>
-    </div>
-    <div class="step rv d1">
-      <div class="step-num">03 — Distribution</div>
-      <div class="step-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </div>
-      <h3>We launch the wave</h3>
-      <p>Our network of 30+ affiliate curators posts from their own accounts across TikTok, Reels, Shorts, and X — wave after wave, every day, reaching audiences that have never seen you before.</p>
-      <div class="step-bar"></div>
-    </div>
-    <div class="step rv d2">
-      <div class="step-num">04 — Results</div>
-      <div class="step-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      </div>
-      <h3>Pay only for results</h3>
-      <p>Curators earn $1–2 per 1,000 views delivered. No views, no pay. You never spend a dollar until your content is actively building your audience across every platform — week after week.</p>
-      <div class="step-bar"></div>
-    </div>
-  </div>
-</div></div>
-</div>
-
-<!-- THE SYSTEM -->
-<div id="system">
-<div class="wrap"><div class="sec">
-  <div class="section-tag rv">The system</div>
-  <h2 class="display rv">How the <em>Affiliate Clipping<br>System</em> actually works</h2>
-  <p class="lead-text rv">A technical breakdown of the distribution engine we build for your brand.</p>
-  <div class="flow-card rv">
-    <div class="fc-header">
-      <div class="fc-title">Campaign architecture</div>
-      <div class="fc-live"><div class="fc-live-dot"></div>Live system</div>
-    </div>
-    <div class="flow-nodes">
-      <div class="fn">
-        <div class="fn-step">Input</div>
-        <div class="fn-num"><span class="ac">∞</span></div>
-        <div class="fn-name">Your content archive</div>
-        <div class="fn-desc">Long-form videos, podcasts, interviews — content you've already created. Nothing new needed.</div>
-      </div>
-      <div class="fn">
-        <div class="fn-step">Extract</div>
-        <div class="fn-num">8–<span class="ac">12</span></div>
-        <div class="fn-name">Clips per video</div>
-        <div class="fn-desc">We pull the highest-converting moments and format them as platform-native short-form clips.</div>
-      </div>
-      <div class="fn">
-        <div class="fn-step">Deploy</div>
-        <div class="fn-num">20–<span class="ac">50</span></div>
-        <div class="fn-name">Curators deployed</div>
-        <div class="fn-desc">Each posting 2× daily from their own dedicated accounts — paid per 1K views delivered.</div>
-      </div>
-      <div class="fn">
-        <div class="fn-step">Result</div>
-        <div class="fn-num">5M–<span class="ac">10M</span></div>
-        <div class="fn-name">Monthly views</div>
-        <div class="fn-desc">Compounding reach that builds an evergreen audience — not rented attention that stops when you do.</div>
-      </div>
-    </div>
-    <div class="flow-plats">
-      <div class="fp">
-        <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.77 0 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 1,0 6.33 6.34V8.69a8.17 8.17 0 0 0 4.77 1.52V6.75a4.85 4.85 0 0 1-1-.06z"/></svg>
-        <div><div class="fp-name">TikTok</div><div class="fp-stat">1B+ daily users</div></div>
-      </div>
-      <div class="fp">
-        <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        <div><div class="fp-name">Instagram Reels</div><div class="fp-stat">2B+ monthly users</div></div>
-      </div>
-      <div class="fp">
-        <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-        <div><div class="fp-name">YouTube Shorts</div><div class="fp-stat">70B+ daily views</div></div>
-      </div>
-      <div class="fp">
-        <svg viewBox="0 0 24 24" fill="#FF6B35"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        <div><div class="fp-name">X / Twitter</div><div class="fp-stat">600M+ monthly users</div></div>
-      </div>
-    </div>
-  </div>
-</div></div>
-</div>
-
-<!-- COMPARISON -->
-<div id="compare" style="background:var(--s1);border-top:1px solid var(--b1);border-bottom:1px solid var(--b1)">
-<div class="wrap"><div class="sec">
-  <div class="section-tag rv">Why ContentCred</div>
-  <h2 class="display rv">Paid ads vs. <em>clip distribution</em></h2>
-  <p class="lead-text rv">The economics are not comparable. Here is why creators are making the switch.</p>
-  <div class="rv">
-    <div class="comp-table">
-      <div class="comp-head">
-        <div class="ch">Metric</div>
-        <div class="ch">Paid Ads</div>
-        <div class="ch win"><div class="ch-dot"></div>ContentCred</div>
-      </div>
-      <div class="comp-row"><div class="cc feat">Cost model</div><div class="cc"><span class="bad">Pay regardless of results</span></div><div class="cc win">Pay only for views delivered</div></div>
-      <div class="comp-row"><div class="cc feat">Upfront cost</div><div class="cc"><span class="bad">$5K–$20K/month minimum</span></div><div class="cc win">$0 upfront · zero risk</div></div>
-      <div class="comp-row"><div class="cc feat">Retention at 90 days</div><div class="cc"><span class="bad">~10% average</span></div><div class="cc win">40–60% average</div></div>
-      <div class="comp-row"><div class="cc feat">Cost per retained customer</div><div class="cc"><span class="bad">$333 average</span></div><div class="cc win">$1.67 average</div></div>
-      <div class="comp-row"><div class="cc feat">Compounds over time</div><div class="cc"><span class="bad">Stops when you stop paying</span></div><div class="cc win">Builds evergreen audience</div></div>
-      <div class="comp-row"><div class="cc feat">New content required</div><div class="cc"><span class="bad">Constant creative refresh</span></div><div class="cc win">Uses existing content</div></div>
-      <div class="comp-row"><div class="cc feat">Platforms reached</div><div class="cc">1–2 platforms</div><div class="cc win">4+ simultaneously</div></div>
-    </div>
-    <div class="vs-cards">
-      <div class="vs-card vs-bad">
-        <h4>Other agencies</h4>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(220,75,75,0.65)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>Slow onboarding — weeks before launch</div>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(220,75,75,0.65)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>Monthly retainers regardless of results</div>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(220,75,75,0.65)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>Low-quality clippers with no incentive</div>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(220,75,75,0.65)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>Limited coverage — usually one platform</div>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(220,75,75,0.65)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>No transparency into results</div>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(220,75,75,0.65)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>You carry all the financial risk</div>
-      </div>
-      <div class="vs-card vs-good">
-        <h4>ContentCred</h4>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Campaign live within days of the call</div>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>100% performance-based — pay per view only</div>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Curators paid on results — aligned incentives</div>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>TikTok · Reels · Shorts · X — all four at once</div>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Full transparency on views and performance</div>
-        <div class="vs-item"><div class="vs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Zero risk — you only pay when it works</div>
-      </div>
-    </div>
-  </div>
-</div></div>
-</div>
-
-<!-- FAQ -->
-<div id="faq" class="faq-bg">
-<div class="wrap"><div class="sec">
-  <div class="section-tag rv">FAQ</div>
-  <h2 class="display rv">Common questions</h2>
-  <div class="faq-layout">
-    <div class="faq-sticky rv">
-      <h3>Everything you need to know about ContentCred</h3>
-      <p>Can't find your answer here? Book a free strategy call and we'll walk you through everything in 30 minutes.</p>
-      <a href="https://calendly.com/contentcred-strategy/content-distribution-strategy-call" target="_blank" class="faq-cta">Book a call →</a>
-    </div>
-    <div class="faq-list rv d1">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">What exactly is an Affiliate Clipping System?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
-        <div class="faq-ans"><div class="faq-ans-inner">A network of independent content curators who create dedicated fan pages for your brand on TikTok, Reels, YouTube Shorts, and X. They clip your existing long-form content and post it from their own accounts — each curator paid $1–2 per 1,000 views. You get massive reach without creating anything new or paying anything upfront.</div></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Do I need to create new content for this?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
-        <div class="faq-ans"><div class="faq-ans-inner">No. The system is built around content you have already created — YouTube videos, podcast episodes, long-form Reels, webinar recordings. Most creators have 50+ videos in their archive doing a fraction of what they could be. We use what you have.</div></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">How much does it cost?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
-        <div class="faq-ans"><div class="faq-ans-inner">Zero upfront. Curators are paid $1–2 per 1,000 views they deliver. You only pay once views are generated. No setup fees, no retainers, no minimum commitments. We take a percentage of new revenue generated — so we only win when you grow.</div></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">How quickly can a campaign launch?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
-        <div class="faq-ans"><div class="faq-ans-inner">After the strategy call, most campaigns are live within 5–10 days. That covers content auditing, clipper recruitment, fan page setup, and the first distribution wave going live across all four platforms.</div></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">What results can I realistically expect?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
-        <div class="faq-ans"><div class="faq-ans-inner">A standard campaign with 30 curators posting 2× per day generates 1,800+ clips per month, typically driving 5M–10M views. The quality of your content, your niche, and your offer all influence how those views convert into followers and leads.</div></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">Does this work if my audience is still small?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
-        <div class="faq-ans"><div class="faq-ans-inner">Yes — clip distribution is most powerful early, when every new follower compounds from a low base. If you have existing long-form content and a proven offer, you are ready. The earlier you start, the steeper the growth curve.</div></div>
-      </div>
-    </div>
-  </div>
-</div></div>
-</div>
-
-<!-- FINAL CTA -->
-<section class="cta-section">
-  <div class="cta-glow"></div>
-  <div class="cta-grid-bg"></div>
-  <div class="wrap rv">
-    <h2>Ready to turn your content<br>into a <em>distribution engine?</em></h2>
-    <p class="lead-text" style="margin:0 auto 52px">Book a free 30-minute strategy call. We will map out exactly how clip distribution works for your content and your offer.</p>
-    <div class="cta-card">
-      <a href="https://calendly.com/contentcred-strategy/content-distribution-strategy-call" target="_blank" class="btn-primary">Book your free strategy call →</a>
-      <div class="trust-line">
-        <span>30-minute call</span><span class="trust-sep">·</span>
-        <span>No prep needed</span><span class="trust-sep">·</span>
-        <span>Performance-based</span><span class="trust-sep">·</span>
-        <span>Zero obligation</span>
+      <div class="svc-panel" id="svc-panel">
+        <!-- populated by JS -->
       </div>
     </div>
   </div>
 </section>
 
-<footer>
-  <div class="f-logo">
-    <svg viewBox="0 0 120 60" fill="none"><path d="M28,10 A22,22 0 1,0 28,50 L38,50 A12,12 0 1,1 38,10 Z" fill="#FF6B35"/><rect x="57" y="6" width="4" height="48" fill="#fff" rx="2"/><path d="M92,10 A22,22 0 1,1 92,50 L82,50 A12,12 0 1,0 82,10 Z" fill="#FF6B35"/></svg>
-    ContentCred
+<!-- PROCESS -->
+<section class="section" id="process">
+  <div class="container">
+    <div class="eyebrow rv" style="margin-bottom:0">02 — How It Works</div>
+    <h2 class="section-h2 rv">Live in <span class="acc">72 hours.</span></h2>
+    <p class="section-lead rv">No slow onboarding. No complex setup. Book a call and we handle everything from audit to first post.</p>
+    <div class="process-grid">
+      <div class="process-step rv d1">
+        <div class="process-num">01</div>
+        <div class="process-title">Strategy Call</div>
+        <p class="process-desc">We diagnose your content library, goals, and what success looks like in the first 90 days. No deck. No pitch. Just the math.</p>
+        <div class="process-arrow">→</div>
+      </div>
+      <div class="process-step rv d2">
+        <div class="process-num">02</div>
+        <div class="process-title">Campaign Setup</div>
+        <p class="process-desc">We configure brand rules, payout tiers, and the clipper submission queue. Your brief, your standards — built in 48 hours.</p>
+        <div class="process-arrow">→</div>
+      </div>
+      <div class="process-step rv d3">
+        <div class="process-num">03</div>
+        <div class="process-title">Army Activation</div>
+        <p class="process-desc">Clippers onboard, receive your brief, and start posting clips across their own accounts. Multiple times a day, every day.</p>
+        <div class="process-arrow">→</div>
+      </div>
+      <div class="process-step rv d4">
+        <div class="process-num">04</div>
+        <div class="process-title">Review & Pay</div>
+        <p class="process-desc">Every submission is reviewed before payout. You approve, the system pays, the feed keeps flooding.</p>
+      </div>
+    </div>
+    <div class="process-note rv">
+      <div class="process-note-tag">Live System</div>
+      <p class="process-note-body">Campaigns typically go live within 5–10 days of the strategy call. That includes content auditing, clipper recruitment, fan page setup, and the first distribution wave across all four platforms.</p>
+    </div>
   </div>
-  <div class="f-copy">© 2026 ContentCred · contentcred.com · Performance-Based Content Distribution</div>
+</section>
+
+<!-- HALFTIME -->
+<section id="halftime">
+  <div class="grain"></div>
+  <div class="halftime-eyebrow">
+    <span style="width:5px;height:5px;border-radius:50%;background:rgba(7,7,10,.35);display:inline-block"></span>
+    The strategy
+  </div>
+  <div class="halftime-hl rv">
+    The feed is the war.<br>We build the army.
+  </div>
+  <p class="halftime-sub rv d1">Same playbook the biggest creators use · run for you · managed on autopilot</p>
+</section>
+
+<!-- COMPARISON -->
+<section class="section" id="compare">
+  <div class="container">
+    <div class="eyebrow rv" style="margin-bottom:0">03 — Why ContentCred</div>
+    <h2 class="section-h2 rv">Paid ads vs. <span class="acc">clip distribution.</span></h2>
+    <p class="section-lead rv">The economics are structurally different. Here's why creators are making the switch.</p>
+    <div class="comp-table rv">
+      <div class="comp-head">
+        <div class="comp-hcell">Metric</div>
+        <div class="comp-hcell">Paid Ads</div>
+        <div class="comp-hcell win"><span class="comp-win-dot"></span>ContentCred</div>
+      </div>
+      <div class="comp-row"><div class="comp-cell lbl">Cost model</div><div class="comp-cell"><span class="comp-bad">Pay regardless of results</span></div><div class="comp-cell win">Pay only for views delivered</div></div>
+      <div class="comp-row"><div class="comp-cell lbl">Budget model</div><div class="comp-cell"><span class="comp-bad">Ad spend + agency fee regardless</span></div><div class="comp-cell win">$5K deposit · 25–35% mgmt fee · no retainer</div></div>
+      <div class="comp-row"><div class="comp-cell lbl">New content required</div><div class="comp-cell"><span class="comp-bad">Constant creative refresh</span></div><div class="comp-cell win">Works from your existing archive</div></div>
+      <div class="comp-row"><div class="comp-cell lbl">Compounds over time</div><div class="comp-cell"><span class="comp-bad">Stops when you stop paying</span></div><div class="comp-cell win">Clips keep circulating after posting</div></div>
+      <div class="comp-row"><div class="comp-cell lbl">Audience reach</div><div class="comp-cell"><span class="comp-bad">Rented attention at budget cap</span></div><div class="comp-cell win">New audiences via 30+ real accounts</div></div>
+      <div class="comp-row"><div class="comp-cell lbl">Risk</div><div class="comp-cell"><span class="comp-bad">High — spend first, hope for results</span></div><div class="comp-cell win">Zero — unspent budget fully refunded</div></div>
+    </div>
+    <div class="pricing-block rv">
+      <div class="pricing-block-head">Transparency: How the Budget Works</div>
+      <div class="pricing-block-body">
+        <div class="pricing-block-title">Your money only moves<br>when views are delivered.</div>
+        <p>Your campaign requires a minimum <strong>$5,000 clipping budget</strong>. This is not a fee. It is a performance reserve held to pay clippers for the views they deliver. You control it at all times.</p>
+        <p>Our fee is <strong>25–35% of your clipping budget</strong>, confirmed before launch. It covers campaign architecture, clipper recruitment, clip production, and performance tracking. Agreed upfront, no surprises.</p>
+        <p>If a campaign underperforms and you want to stop, <strong>the unspent portion is returned to you</strong>. No lock-in. No fine print. Most successful campaigns run at $20K/month. Start at $5K, validate the model, and scale when the results make it obvious.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="section" style="border-top:1px solid var(--ln)">
+  <div class="container">
+    <div class="founder-grid rv">
+      <div class="founder-img-wrap">
+        <div class="founder-img">
+          <img src="https://media.licdn.com/dms/image/v2/D4E03AQFn7sBrU9XLHQ/profile-displayphoto-shrink_400_400/B4EZPtfcVXHgAg-/0/1734895668776?e=1752710400&v=beta&t=qHBHMEUBzQm3Pao8pv0O0SL6eGqMJOk8-QQZRN7-3ks" alt="Dev, Founder of ContentCred" onerror="this.parentElement.style.background='#1C1C24'">
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:4px">
+          <div class="founder-tag">Dev · Founder, ContentCred</div>
+          <a href="https://www.linkedin.com/in/devvendar-vanapalli/" target="_blank" class="founder-linkedin">→ Connect on LinkedIn</a>
+        </div>
+      </div>
+      <div class="founder-copy">
+        <div class="eyebrow" style="margin-bottom:0">Who's Behind This</div>
+        <h2>Built by a founder who understands distribution.</h2>
+        <p>ContentCred was built on one observation: creators with great content and proven offers are leaving millions of views and thousands of dollars on the table every month, simply because distribution is broken.</p>
+        <p>The Affiliate Clipping System is the fix. A performance-based network where clippers only earn when your content earns reach. No retainers. No vanity metrics. No risk on your side.</p>
+        <p>If you have existing long-form content and a proven offer, I want to show you exactly what this looks like for your situation.</p>
+        <button class="btn-primary" id="founder-book-btn" style="margin-top:8px">Book Your Free Strategy Call →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section section-alt" id="faq">
+  <div class="container">
+    <div class="eyebrow rv" style="margin-bottom:0">04 — Questions</div>
+    <h2 class="section-h2 rv" style="margin-bottom:0">Answered.</h2>
+    <div class="faq-grid">
+      <div class="faq-sticky rv">
+        <h3>Still have questions?</h3>
+        <p>Book a free 20-minute strategy call. We'll look at your content library, map the engine, and show you the math live. No deck, no pitch.</p>
+        <a href="https://calendly.com/contentcred-strategy/content-distribution-strategy-call" target="_blank" class="faq-sticky-cta">Book a free call →</a>
+      </div>
+      <div class="faq-list rv d2">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">What exactly is the Affiliate Clipping System?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
+          <div class="faq-ans"><div class="faq-ans-inner">A network of independent content curators who create dedicated fan pages for your brand on TikTok, Reels, YouTube Shorts, and X. They clip your existing long-form content and post it from their own accounts — each curator paid $1–2 per 1,000 views. You get massive reach without creating anything new or paying anything upfront.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Do I need to create new content?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
+          <div class="faq-ans"><div class="faq-ans-inner">No. The system runs entirely on content you've already created — YouTube videos, podcast episodes, webinars, long-form Reels. Most clients have 50+ videos in their archive doing a fraction of what they could. We use what you have.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">How much does it cost?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
+          <div class="faq-ans"><div class="faq-ans-inner">Campaigns start with a minimum $5,000 clipping budget (a performance reserve — not a fee). Our management fee is 25–35% of that budget, agreed before launch. Unspent budget is fully refunded. No retainers, no surprises.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">How quickly can a campaign launch?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
+          <div class="faq-ans"><div class="faq-ans-inner">Most campaigns are live within 5–10 days of the strategy call. That covers content auditing, clipper recruitment, fan page setup, and the first posting wave across all four platforms.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">What results can I realistically expect?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
+          <div class="faq-ans"><div class="faq-ans-inner">A standard campaign with 30 clippers posting 2× daily generates 1,800+ clips per month across all platforms. The quality of your content, niche, and offer determine how those views convert into followers and customers.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Does this work if my audience is small?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
+          <div class="faq-ans"><div class="faq-ans-inner">Yes — distribution is most powerful early, when every new follower compounds from a low base. You need existing long-form content and a proven offer. Audience size doesn't matter. The earlier you start, the steeper the growth curve.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Can I join as a clipper?<span class="faq-toggle"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5.5 1v9M1 5.5h9"/></svg></span></button>
+          <div class="faq-ans"><div class="faq-ans-inner">Yes. Clippers earn $1–2 per 1,000 views they deliver. Join the network at <a href="https://whop.com/clipcred" target="_blank" style="color:var(--acc)">whop.com/clipcred</a>.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section id="cta-section">
+  <div class="cta-glow"></div>
+  <div class="grain"></div>
+  <h2 class="cta-hl rv">Your content.<br><span class="acc">Everywhere.</span></h2>
+  <p class="cta-sub rv">Book a 20-minute strategy call. We diagnose your content engine, show you the math, and build the army. No pitch. Just numbers.</p>
+  <div class="cta-actions rv">
+    <button class="btn-primary" id="cta-book-btn" style="font-size:15px;padding:15px 32px;box-shadow:0 8px 48px rgba(255,107,53,.28)">Book A Strategy Call →</button>
+    <a href="https://calendly.com/contentcred-strategy/content-distribution-strategy-call" target="_blank" class="btn-ghost" style="font-size:15px;padding:15px 32px">Open Calendly</a>
+  </div>
+  <div class="cta-trust rv d1">
+    <div class="trust-badge">3 Founding Spots</div>
+    <div class="trust-badge">Pay Per View</div>
+    <div class="trust-badge">Unspent Budget Refunded</div>
+    <div class="trust-badge">No Retainer</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <svg viewBox="0 0 40 40" fill="none"><path d="M10,4 A14,14 0 1,0 10,36 L17,36 A7,7 0 1,1 17,4 Z" fill="#FF6B35"/><rect x="20" y="2" width="3" height="36" rx="1.5" fill="#F5F5F5"/><path d="M30,4 A14,14 0 1,1 30,36 L23,36 A7,7 0 1,0 23,4 Z" fill="#FF6B35"/></svg>
+        CONTENT<span class="acc">CRED</span>
+      </div>
+      <div class="footer-tagline">The Affiliate Clipping System</div>
+    </div>
+    <div class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#process">How It Works</a>
+      <a href="#compare">Why Us</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://whop.com/clipcred" target="_blank" style="color:var(--acc)">Join as Clipper →</a>
+    </div>
+    <div class="footer-right">
+      <a href="mailto:contentcred.agency@gmail.com" class="footer-email">contentcred.agency@gmail.com</a>
+      <div class="footer-copy">© 2026 ContentCred LLC · NY</div>
+    </div>
+  </div>
 </footer>
 
 <script>
-window.addEventListener('scroll',()=>{
-  document.getElementById('nav').classList.toggle('scrolled',scrollY>80);
-  document.getElementById('floatCta').classList.toggle('show',scrollY>600);
+/* ── NAV ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
+document.getElementById('ham-btn').onclick = () => document.getElementById('mob-menu').classList.add('open');
+document.getElementById('mob-close').onclick = closeMob;
+function closeMob(){ document.getElementById('mob-menu').classList.remove('open') }
+
+/* ── SMOOTH SCROLL ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
+}));
+
+/* ── BOOK BUTTONS → CALENDLY ── */
+const CAL = 'https://calendly.com/contentcred-strategy/content-distribution-strategy-call';
+['nav-book-btn','hero-book-btn','mob-book-btn','founder-book-btn','cta-book-btn'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.onclick = () => window.open(CAL, '_blank');
 });
 
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',e=>{
-    e.preventDefault();
-    document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
-  });
-});
-
-function openMob(){document.getElementById('mob').classList.add('open')}
-function closeMob(){document.getElementById('mob').classList.remove('open')}
-
-function toggleFaq(btn){
-  const item=btn.parentElement;
-  const wasOpen=item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-  if(!wasOpen)item.classList.add('open');
-}
-
-function runCounter(el){
-  if(el.dataset.done)return;
-  el.dataset.done='1';
-  const to=+el.dataset.to,suf=el.dataset.suf||'';
-  let n=0;const dur=1800,fps=60,steps=dur/(1000/fps);
-  const t=setInterval(()=>{
-    n+=to/steps;if(n>=to){n=to;clearInterval(t)}
-    el.textContent=Math.round(n)+suf;
-  },1000/fps);
-}
-
+/* ── VSL ── */
 function playVsl(){
-  const frame=document.getElementById('vslFrame');
-  const iframe=document.getElementById('vslIframe');
-  if(frame.classList.contains('playing'))return;
-  iframe.src=iframe.dataset.src;
+  const frame = document.getElementById('vslFrame');
+  const iframe = document.getElementById('vslIframe');
+  if(frame.classList.contains('playing')) return;
+  iframe.src = iframe.dataset.src;
   frame.classList.add('playing');
 }
 
-const io=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(!e.isIntersecting)return;
+/* ── SCROLL REVEAL ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(!e.isIntersecting) return;
     e.target.classList.add('on');
-    e.target.querySelectorAll('[data-to]').forEach(runCounter);
     io.unobserve(e.target);
   });
-},{threshold:.07,rootMargin:'0px 0px -32px 0px'});
-document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+}, {threshold:.06, rootMargin:'0px 0px -24px 0px'});
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+/* ── HERO ENTRANCE ── */
+setTimeout(() => {
+  document.querySelectorAll('.hero-eyebrow,.hero-headline,.hero-divider,.hero-bottom,.hero-stats').forEach(el => {
+    el.style.animationPlayState = 'running';
+  });
+}, 100);
+
+/* ── COUNTER ANIMATION ── */
+function animateCounter(el){
+  if(el.dataset.done) return;
+  el.dataset.done = '1';
+  const target = parseInt(el.dataset.target.replace(/,/g,''));
+  const suffix = el.dataset.suffix || '';
+  let n = 0; const dur = 1800, steps = dur / (1000/60);
+  const t = setInterval(() => {
+    n += target / steps;
+    if(n >= target){ n = target; clearInterval(t); }
+    el.textContent = Math.round(n).toLocaleString() + suffix;
+  }, 1000/60);
+}
+const cio = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(!e.isIntersecting) return;
+    e.target.querySelectorAll('[data-target]').forEach(animateCounter);
+  });
+}, {threshold:.2});
+document.querySelectorAll('.metrics-band').forEach(el => cio.observe(el));
+
+/* ── SERVICES TABS ── */
+const svcs = [
+  {
+    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>`,
+    title: 'Content Clipping',
+    desc: 'We extract 8–12 high-converting moments from every long-form video and turn them into platform-native short clips. Each clip engineered to hook in the first 3 seconds and pull viewers toward your offer.',
+    bullets: ['8–12 clips per source video','Platform-native editing for TikTok, Reels, Shorts, X','Captions, hooks, and format optimization included','Built on your existing archive — no filming required']
+  },
+  {
+    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>`,
+    title: 'Performance Campaigns',
+    desc: 'Our affiliate clipper network posts your clips from their own accounts — 30+ curators, 2× daily, across all four platforms. They earn $1–2 per 1,000 views. You pay only when views are delivered.',
+    bullets: ['30+ dedicated clipper accounts per campaign','Pay-per-view model — zero upfront risk','Unspent budget is 100% refundable','Full transparency on view counts and payout']
+  },
+  {
+    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>`,
+    title: 'Podcast Clipping',
+    desc: 'Your podcast episodes hold dozens of viral moments. We pull the most insightful, provocative, and shareable exchanges and build a short-form distribution machine from your back catalogue.',
+    bullets: ['Full episode audit and clip mapping','Audiogram and talking-head formats both supported','Episode archive — even old episodes get distributed','Synchronized captions optimized for silent viewing']
+  },
+  {
+    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 2-4h16l2 4"/><path d="M4 7v13h16V7"/><path d="M8 10v4"/><path d="M16 10v4"/></svg>`,
+    title: 'Brand Activation',
+    desc: 'For brands with an existing audience who want to flood new demographics. We design a custom clipper brief and manage a dedicated network of fan pages for your brand across every short-form platform.',
+    bullets: ['Custom brand guidelines and clip brief','Dedicated fan pages for your brand','Managed recruitement and quality control','Monthly reporting and campaign optimization']
+  }
+];
+
+function renderSvc(idx){
+  const s = svcs[idx];
+  document.getElementById('svc-panel').innerHTML = `
+    <div class="svc-panel-icon">${s.icon}</div>
+    <div class="svc-panel-title">${s.title}</div>
+    <div class="svc-panel-desc">${s.desc}</div>
+    <ul class="svc-bullets">${s.bullets.map(b=>`<li class="svc-bullet">${b}</li>`).join('')}</ul>
+  `;
+  document.querySelectorAll('.svc-tab').forEach((t,i) => t.classList.toggle('active', i === idx));
+}
+renderSvc(0);
+document.querySelectorAll('.svc-tab').forEach((tab,i) => tab.onclick = () => renderSvc(i));
+
+/* ── FAQ ── */
+function toggleFaq(btn){
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
 </script>
 </body>
 </html>
